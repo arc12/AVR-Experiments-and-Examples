@@ -185,9 +185,8 @@ ISR(ADC_vect)
 /* ----------------------------
 *  These are the Degrade experiments.
 *  See how the precision degrades with ADC clock freq outside the range specified in the datasheet
-*  The experiment makes 10 readings of the ADC with minimal (/2) prescaling of the system clock and
-*  Then successively increases the pre-scaling before taking 10 more readings.
-*  For a 8MHz system clock this means the ADC clock will be 4MHz, 2MHz, 1MHz, 500kHz, 100kHz, 50kHz, 25kHz
+*  The experiment reads the ADC with minimal (/2) prescaling of the system clock and then successively increases the pre-scaling.
+*  For a 8MHz system clock this means the ADC clock will be 4MHz, 2MHz, 1MHz, 500kHz, 250kHz, 125kHz, 62.5kHz
 *  FUSES:	CKDIV8 = [ ]
 *			SUT_CKSEL = INTRCOSC_8MHZ_6CK_14CK_0MS
 *  For a 128kHz system clock this means the ADC will be clocked at 64kHz, 32kHz, 16kHz, 8kHz, 4kHz, 2kHz, 1kHz
