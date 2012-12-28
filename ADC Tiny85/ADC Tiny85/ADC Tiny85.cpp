@@ -1,36 +1,36 @@
 /*
- * ADC_Tiny85.cpp
- *
- * Various examples and experiments with the ADC.
- * ADC readings are sent as 3-wire serial (as master, between one and two bytes per cycle)
- * assumes that there is nothing else on the bus so does not do "proper" SPI
- *
- *FUSES:
- * set the clock to be output (to pin 3)
- * NB: some of these are meant to be run with other fuses at non-default settings. See below!
- *
- * Logic Sniffer Channel connections (typ)
- * 0 - /CS
- * 1 - SCK, the serial clock
- * 2 - DO (MOSI as far as logic analyser is concerned but this is labelled MISO on the ATtiny)
- * 3 - GND (MISO as far as logic analyser is concerned)
- * 4 - CLKO, the system clock
- *
- * Created: 17/12/2012 22:27:27
- *  Author: Adam
- */
+* ADC_Tiny85.cpp
+*
+* Various examples and experiments with the ADC.
+* ADC readings are sent as 3-wire serial (as master, between one and two bytes per cycle)
+* assumes that there is nothing else on the bus so does not do "proper" SPI
+*
+*FUSES:
+* set the clock to be output (to pin 3)
+* NB: some of these are meant to be run with other fuses at non-default settings. See below!
+*
+* Logic Sniffer Channel connections (typ)
+* 0 - /CS
+* 1 - SCK, the serial clock
+* 2 - DO (MOSI as far as logic analyser is concerned but this is labelled MISO on the ATtiny)
+* 3 - GND (MISO as far as logic analyser is concerned)
+* 4 - CLKO, the system clock
+*
+* Created: 17/12/2012 22:27:27
+*  Author: Adam
+*/
 
 /*
 * ***Made available using the The MIT License (MIT)***
 * Copyright (c) 2012, Adam Cooper
 *
-* Permission is hereby granted, free of charge, to any person obtaining a copy of this software and 
+* Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
 * associated documentation files (the "Software"), to deal in the Software without restriction, including
 * without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 * copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the
 * following conditions:
 *
-* The above copyright notice and this permission notice shall be included in all copies or 
+* The above copyright notice and this permission notice shall be included in all copies or
 * substantial portions of the Software.
 *
 * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
@@ -75,23 +75,23 @@ int main(void)
 	PORTB |= (1<<PB0);//slave not selected
 	
 	//setup serial comms - 3 wire
-	USICR = (1<<USIWM0);	
+	USICR = (1<<USIWM0);
 	
 	//place example-specific initialisers here
-	Init_TimerTriggered();	
-    while(1)
-    {
+	//Init_TimerTriggered();
+	while(1)
+	{
 		//SimpleRead();
-        //Degrade_2();		
+		Degrade_2();
 		//HelloWorld();
-    }
+	}
 }
 
 //sends the specified byte as serial (Three wire style).
 void sendBytes(unsigned char bytes[], unsigned char size){
 	//slave select
 	PORTB &= ~(1<<PB0);
-		
+	
 	//loop over bytes
 	for(unsigned char b = 0; b<size;b++){
 		//load the byte to the output register
@@ -113,21 +113,21 @@ void sendBytes(unsigned char bytes[], unsigned char size){
 		USICR = usi_low;
 		USICR = usi_high;
 		USICR = usi_low;
-		USICR = usi_high;		
-	}//bytes loop	
+		USICR = usi_high;
+	}//bytes loop
 	
 	//slave de-select
-	PORTB |= (1<<PB0);		
+	PORTB |= (1<<PB0);
 }
 
 //Test the communications works OK.
 void HelloWorld(){
-		unsigned char send[] = "Hello World!";
-		sendBytes(send, sizeof(send)-1);	//-1 drops the null
-}	
+	unsigned char send[] = "Hello World!";
+	sendBytes(send, sizeof(send)-1);	//-1 drops the null
+}
 
 //perform a single read and send H and L bytes to serial
-//assumes 8MHz clock, hence prescaling 
+//assumes 8MHz clock, hence prescaling
 void SimpleRead(){
 	//set prescaler to div64 --> 125kHz ADC clock
 	ADCSRA |= (1<<ADPS2) | (1<<ADPS1);
@@ -211,14 +211,14 @@ void Degrade_1(){
 		ADCSRA |= (1<<ADSC);
 		//wait for end of conversion
 		while (ADCSRA & (1<<ADSC));
-	unsigned char result[]={ADCH};
-	//result[0] = ADCH;
-	sendBytes(result,1);
-}
+		unsigned char result[]={ADCH};
+		//result[0] = ADCH;
+		sendBytes(result,1);
+	}
 
-// 	//send a comma to separate readings
-unsigned char comma[]=",";
-sendBytes(comma,1);
+	//send a comma to separate readings
+	unsigned char comma[]=",";
+	sendBytes(comma,1);
 }
 
 /*

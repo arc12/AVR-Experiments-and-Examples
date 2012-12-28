@@ -1,1 +1,1 @@
-Experiments with ATtiny 85 ADC. See the C++ and associated blog post at http://www.hilltop-cottage.info/blogs/adam/?p=251
+Experiments with ATtiny 85 ADC. See the C++ and associated blog posts at http://www.hilltop-cottage.info/blogs/adam/?p=251 and http://www.hilltop-cottage.info/blogs/adam/?p=288
