@@ -1,0 +1,1 @@
+Several small bits of experimentation and examples (created as a way of learning what the datasheets really mean) for various AVR microcontrollers. C++.
