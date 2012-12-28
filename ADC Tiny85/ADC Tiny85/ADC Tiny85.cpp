@@ -18,7 +18,28 @@
  *
  * Created: 17/12/2012 22:27:27
  *  Author: Adam
- */ 
+ */
+
+/*
+* ***Made available using the The MIT License (MIT)***
+* Copyright (c) 2012, Adam Cooper
+*
+* Permission is hereby granted, free of charge, to any person obtaining a copy of this software and 
+* associated documentation files (the "Software"), to deal in the Software without restriction, including
+* without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+* copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the
+* following conditions:
+*
+* The above copyright notice and this permission notice shall be included in all copies or 
+* substantial portions of the Software.
+*
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+* INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+* AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+* DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
+* OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+* ************ end licence ***************
+*/
 
 #include <avr/io.h>
 #include <avr/interrupt.h> //needed for TimerTriggered
@@ -28,7 +49,6 @@ void HelloWorld();
 void SimpleRead();
 void Degrade_1();
 void Degrade_2();
-void TimerTriggered();
 void Init_TimerTriggered();
 void sendBytes(unsigned char bytes[],unsigned char size);
 
@@ -39,39 +59,30 @@ void sendBytes(unsigned char bytes[],unsigned char size);
 const unsigned char usi_low = (1<<USIWM0) | (1<<USITC);
 const unsigned char usi_high = (1<<USIWM0) | (1<<USITC) | (1<<USICLK);
 
-/*
-* global variables
-*/
-//used by some examples to self-initialise
-bool initialised = false;
-
 int main(void)
 {
-	//setup ADC
-	//	ADC3/PB3 pin2
+	//setup ADC -	ADC3/PB3 pin2
 	ADMUX = (1<<MUX1) | (1<<MUX0); // MUX set to ADC3. VCC as ref. Right justified
 	ADCSRA = (1<<ADEN); // turn ADC on and initialise. no auto-trigger, no interrupt. prescaler to div2
 	DIDR0 = (1<<ADC3D);//turn digital input circuitry off
 	
-	//setup serial pins for serial
+	//setup pins for serial
 	//  PB2 (SCK/USCK/SCL/ADC1/T0/INT0/PCINT2)
 	// 	PB1 (MISO/DO/AIN1/OC0B/OC1A/PCINT1)
 	// 	PB0 (MOSI/DI/SDA/AIN0/OC0A/OC1A/AREF/PCINT0) - will not be used as DI
 	//	PB0 used as /CS
-	
-	DDRB = (1<<DDB0) | (1<<DDB2) | (1<<DDB1);//USCK and DO as outputs
+	DDRB = (1<<DDB0) | (1<<DDB2) | (1<<DDB1);// /CS, USCK and DO as outputs
 	PORTB |= (1<<PB0);//slave not selected
 	
-	//setup serial comms
-	//3 wire
-	USICR = (1<<USIWM0);		
+	//setup serial comms - 3 wire
+	USICR = (1<<USIWM0);	
 	
+	//place example-specific initialisers here
+	Init_TimerTriggered();	
     while(1)
     {
-		TimerTriggered();
 		//SimpleRead();
-        //Degrade_2();
-		
+        //Degrade_2();		
 		//HelloWorld();
     }
 }
@@ -139,14 +150,7 @@ void SimpleRead(){
 *		FUSES: use 128kHz clock to get an interval >1s.
 *		sends 2 bytes via an interrupt on ADC completion. ADC start is triggered by timer0 compareA
 */
-void TimerTriggered(){
-	//do I need to initialise?
-	if(!initialised){
-		Init_TimerTriggered();
-		initialised = true;
-	}
-}
-
+//NB: there is no "main while loop" code; this is fully harware triggered
 //setup for TimerTriggered
 void Init_TimerTriggered(){
 	//1. enable ADC completion interrupt
@@ -236,7 +240,7 @@ void Degrade_2(){
 		sendBytes(result, 2);
 	}
 
-	// 	//send a comma to separate readings
+	//send a comma to separate readings
 	unsigned char comma[]=",";
 	sendBytes(comma,1);
 }
