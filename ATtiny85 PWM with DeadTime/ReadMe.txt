@@ -1,0 +1,1 @@
+Experiment with ATtiny 85 Dead Time Generator. See the C++ and associated blog post at http://www.hilltop-cottage.info/blogs/adam/?p=300
