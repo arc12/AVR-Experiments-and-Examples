@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>6.0</ProjectVersion>
     <ToolchainName>com.Atmel.AVRGCC8</ToolchainName>
-    <ProjectGuid>{e29ccacb-d993-4179-8a9d-1237dcc506c8}</ProjectGuid>
+    <ProjectGuid>{7270b237-54de-4664-ab60-5a3ff387539b}</ProjectGuid>
     <avrdevice>ATtiny85</avrdevice>
     <avrdeviceseries>none</avrdeviceseries>
     <OutputType>Executable</OutputType>
@@ -12,9 +12,9 @@
     <OutputFileName>$(MSBuildProjectName)</OutputFileName>
     <OutputFileExtension>.elf</OutputFileExtension>
     <OutputDirectory>$(MSBuildProjectDirectory)\$(Configuration)</OutputDirectory>
-    <AssemblyName>ATtiny85 PWM with DeadTime</AssemblyName>
-    <Name>ATtiny85 PWM with DeadTime</Name>
-    <RootNamespace>ATtiny85 PWM with DeadTime</RootNamespace>
+    <AssemblyName>Dead Time ATtiny85</AssemblyName>
+    <Name>Dead Time ATtiny85</Name>
+    <RootNamespace>Dead Time ATtiny85</RootNamespace>
     <ToolchainFlavour>Native</ToolchainFlavour>
     <KeepTimersRunning>true</KeepTimersRunning>
     <OverrideVtor>false</OverrideVtor>
@@ -78,7 +78,7 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="ATtiny85 PWM with DeadTime.cpp">
+    <Compile Include="Dead Time ATtiny85.cpp">
       <SubType>compile</SubType>
     </Compile>
   </ItemGroup>
